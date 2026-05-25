@@ -1,0 +1,29 @@
+# ===========================================================================
+# Lantern channel configuration — INDIA
+# ===========================================================================
+# Active config. Loaded by every pipeline module via lantern.config.load_channel("india").
+# To add a new channel later: copy channels/example.yaml, edit, set ACTIVE_CHANNEL in .env.
+
+# --- Channel identity -----------------------------------------------------
+name: "By Lantern Light"          # Display name (used in tags, descriptions, dashboard)
+slug: "india"                      # Used in file paths (output/india/, records/india/, etc.)
+region: "IN"                       # ISO country code — passed to YouTube/pytrends APIs
+
+# --- Content ---------------------------------------------------------------
+niche: "practical wisdom for hard times"
+themes:
+  - stoic
+  - buddhist
+  - taoist
+  - vedantic                       # universal philosophy; Indian-rooted sources welcome
+language: "en"                     # English narration (Indian-English voice)
+
+# --- Trend research (used by research.py) ---------------------------------
+research:
+  pytrends_geo: "IN"               # Google Trends region
+  youtube_region_code: "IN"        # YouTube Data API regionCode
+  candidates_per_run: 8            # How many topic candidates to surface per run
+
+# Sections for later modules (script, voice, assemble, upload, instagram) will
+# be appended here as each module is built. Missing sections fall back to safe
+# defaults inside lantern/config.py.

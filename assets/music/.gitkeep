@@ -1,0 +1,9 @@
+# Drop royalty-free music tracks (.mp3, .wav) here.
+#
+# Free sources:
+#   - YouTube Audio Library:  studio.youtube.com → Audio Library  (no attribution needed)
+#   - Pixabay Music:          pixabay.com/music                   (Pixabay license)
+#   - Free Music Archive:     freemusicarchive.org                (per-track licenses)
+#
+# Keep a licenses.csv next to the tracks (track filename, source URL, license, attribution).
+# assemble.py will read it and copy the relevant row into each video's provenance record.

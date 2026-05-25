@@ -1,0 +1,99 @@
+# ===========================================================================
+# Lantern — .gitignore
+# ===========================================================================
+# Anything secret, machine-specific, or large stays OUT of git.
+# If you ever wonder "should this be committed?" — the answer is almost
+# always no for things matching the patterns below.
+
+# --- Secrets ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+secrets/*
+!secrets/.gitkeep
+
+# OAuth tokens (runtime artifacts — never commit)
+*.token
+*.token.json
+token.json
+tokens/
+
+# OAuth client JSON — belt-and-suspenders if it ever lands outside secrets/
+client_secret*.json
+*.apps.googleusercontent.com.json
+
+# Claude Code session state (machine-specific)
+.claude/
+
+# --- DEFENSIVE PATTERNS — never let "obviously sensitive" files slip in ---
+# Documents do not belong in a code repo. Move to your Documents folder.
+*.pdf
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.pptx
+*.ppt
+*.rtf
+
+# Backup / recovery codes (2FA, account recovery)
+*backup-cod*
+*backup_cod*
+*Backup-codes*
+*recovery-cod*
+*recovery_cod*
+
+# API keys, credentials, secret-looking files
+*api*key*
+*api_key*
+*apikey*
+*credentials*
+*creds*
+*-key.txt
+*_key.txt
+
+# Top-level .txt files (except requirements.txt). Keeps root clean of stray notes.
+/*.txt
+!/requirements.txt
+
+# --- Per-video provenance records (locally generated; may contain PII) ----
+records/*
+!records/.gitkeep
+
+# --- Media output and caches (large; backup script handles separately) ---
+output/
+cache/
+assets/music/*
+!assets/music/.gitkeep
+
+# --- Python ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+
+# --- Test / lint caches ---------------------------------------------------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- IDE / OS noise -------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*~
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# --- Logs -----------------------------------------------------------------
+*.log
+logs/

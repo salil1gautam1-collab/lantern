@@ -1,0 +1,28 @@
+# ===========================================================================
+# Lantern channel configuration — TEMPLATE
+# ===========================================================================
+# To add a new channel:
+#   1. Copy this file:           Copy-Item channels/example.yaml channels/<slug>.yaml
+#   2. Edit the values below.
+#   3. Set in your .env:         ACTIVE_CHANNEL=<slug>
+#      (or pass on the CLI:      python -m lantern <command> --channel <slug>)
+#
+# Each pipeline module reads only the section it needs. Sections you don't have
+# yet (because that module isn't built) can be omitted.
+
+# --- Channel identity -----------------------------------------------------
+name: "Channel display name"       # Human-readable; appears in tags/descriptions
+slug: "channel-slug"                # ASCII slug; used in file paths
+region: "US"                        # ISO country code (US, IN, GB, etc.)
+
+# --- Content ---------------------------------------------------------------
+niche: "what your channel is about, one phrase"
+themes:                             # Source traditions / topic clusters
+  - example-theme
+language: "en"                      # Narration language code (en, hi, es, etc.)
+
+# --- Trend research (used by research.py) ---------------------------------
+research:
+  pytrends_geo: "US"                # Google Trends region code
+  youtube_region_code: "US"         # YouTube Data API regionCode
+  candidates_per_run: 8             # Topic candidates per run (3–15 is sensible)

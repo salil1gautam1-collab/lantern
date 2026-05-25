@@ -1,0 +1,7 @@
+# Per-video provenance records land here as JSON files (one per video).
+#
+# Each record captures: topic + trend signal, script provenance (manual/AI-drafted/AI-edited),
+# every stock asset used (source + ID + URL + license text at download time), music track,
+# whether the AI-disclosure flag was set on upload, and the human-approval timestamp.
+#
+# Gitignored — these may contain decisions/timestamps you'd rather keep local.

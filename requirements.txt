@@ -1,0 +1,8 @@
+# Lantern — Python dependencies
+#
+# Grows one module at a time. Each section below is added when its module is built.
+# When you add a dep, also note (a) which module needs it and (b) why.
+
+# --- Shared / configuration (every module uses these) ---------------------
+python-dotenv>=1.0.0    # load .env at runtime
+pyyaml>=6.0             # parse channels/*.yaml
