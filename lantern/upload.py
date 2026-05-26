@@ -96,8 +96,11 @@ def _extract_metadata_from_script(script_path: Path | None) -> dict:
         return {}
     text = script_path.read_text(encoding="utf-8")
 
+    # Match the section header through end-of-line so a parenthetical after
+    # "metadata" (e.g. "## YouTube metadata (we'll polish in the dashboard...)")
+    # doesn't break the match.
     meta_match = re.search(
-        r"##\s+YouTube metadata\s*\n(.*?)(?=\n##|\Z)",
+        r"##\s+YouTube metadata[^\n]*\n(.*?)(?=\n##|\Z)",
         text,
         flags=re.DOTALL,
     )
