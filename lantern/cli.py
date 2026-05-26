@@ -131,5 +131,29 @@ def dashboard(ctx: click.Context, host: str, port: int) -> None:
     run_dashboard(ctx.obj["channel"], host=host, port=port)
 
 
+@cli.command()
+@click.option(
+    "--video",
+    "video_path_str",
+    type=click.Path(exists=True),
+    default=None,
+    help="Specific .mp4.approved file to upload. Default: every approved file in this channel.",
+)
+@click.option(
+    "--auth-only",
+    is_flag=True,
+    help="Run the one-time OAuth flow and exit. Use this on first setup before any uploads.",
+)
+@click.pass_context
+def upload(ctx: click.Context, video_path_str: str | None, auth_only: bool) -> None:
+    """Upload approved drafts to YouTube as PRIVATE drafts (you click Publish manually)."""
+    from pathlib import Path
+
+    from .upload import run_upload
+
+    p = Path(video_path_str) if video_path_str else None
+    run_upload(ctx.obj["channel"], ctx.obj["env"], specific_video=p, auth_only=auth_only)
+
+
 if __name__ == "__main__":
     cli()

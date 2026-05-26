@@ -68,3 +68,15 @@ assemble:
   music_volume: 0.10
   music_enabled: true
   ledger_keep_recent: 50
+
+# --- Upload (used by upload.py) -------------------------------------------
+upload:
+  privacy_status: "private"          # private | unlisted | public — KEEP PRIVATE; you publish manually in Studio
+  category_id: "22"                   # 22 = People & Blogs (default for personality content); 27 = Education
+  default_language: "en"
+  default_tags:                       # used if the script's metadata section has no tags
+    - "practical wisdom"
+    - "stoicism"
+    - "philosophy"
+    - "life advice"
+    - "Buddhist wisdom"

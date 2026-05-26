@@ -53,6 +53,19 @@ class AssembleConfig(BaseModel):
     ledger_keep_recent: int = 50           # how many recently-used assets to avoid in dedupe
 
 
+class UploadConfig(BaseModel):
+    privacy_status: str = "private"        # private | unlisted | public — KEEP PRIVATE
+    category_id: str = "22"                 # 22 = People & Blogs, 27 = Education
+    default_language: str = "en"
+    default_tags: list[str] = Field(
+        default_factory=lambda: [
+            "practical wisdom",
+            "philosophy",
+            "life advice",
+        ]
+    )
+
+
 class ChannelConfig(BaseModel):
     name: str
     slug: str
@@ -64,6 +77,7 @@ class ChannelConfig(BaseModel):
     script: ScriptConfig = Field(default_factory=ScriptConfig)
     voice: VoiceConfig = Field(default_factory=VoiceConfig)
     assemble: AssembleConfig = Field(default_factory=AssembleConfig)
+    upload: UploadConfig = Field(default_factory=UploadConfig)
 
 
 class EnvConfig(BaseModel):
