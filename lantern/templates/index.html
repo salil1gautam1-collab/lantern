@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Drafts{% endblock %}
+{% block content %}
+<h2>Drafts awaiting review &mdash; {{ drafts|length }}</h2>
+
+{% if request.query_params.get("approved") %}
+  <div class="flash flash-approve">
+    Approved <code>{{ request.query_params.get("approved") }}</code> — queued for upload (file renamed to <code>.mp4.approved</code>).
+  </div>
+{% endif %}
+{% if request.query_params.get("rejected") %}
+  <div class="flash flash-reject">
+    Rejected and deleted <code>{{ request.query_params.get("rejected") }}</code>.
+  </div>
+{% endif %}
+
+{% if not drafts %}
+  <p class="empty">
+    No drafts waiting. Run <code>python -m lantern assemble</code> to create one,
+    or check that the active channel slug matches your <code>ACTIVE_CHANNEL</code> in <code>.env</code>.
+  </p>
+{% else %}
+  <ul class="draft-list">
+    {% for d in drafts %}
+      <li>
+        <a href="/draft/{{ d.stem }}">
+          {% if d.has_thumbnail %}
+            <img src="{{ d.thumbnail_url }}" alt="thumbnail for {{ d.stem }}">
+          {% else %}
+            <div class="no-thumb">No thumbnail</div>
+          {% endif %}
+          <strong>{{ d.stem }}</strong>
+          <span class="size">{{ d.video_size_mb }} MB</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

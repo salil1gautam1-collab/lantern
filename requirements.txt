@@ -19,3 +19,9 @@ edge-tts>=6.1                     # Microsoft Edge TTS (free, no API key require
 # --- Module 4: assemble.py -------------------------------------------------
 moviepy>=2.1                      # video composition (ffmpeg wrapper)
 Pillow>=10.0                      # thumbnail rendering
+
+# --- Module 5: dashboard (FastAPI) -----------------------------------------
+fastapi>=0.110                    # web framework for review dashboard
+uvicorn[standard]>=0.29           # ASGI server
+jinja2>=3.1                       # template engine
+python-multipart>=0.0.9           # form parsing for POST endpoints

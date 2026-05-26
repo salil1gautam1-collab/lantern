@@ -120,5 +120,16 @@ def assemble(ctx: click.Context, voice_audio_str: str | None) -> None:
     run_assemble(ctx.obj["channel"], env, p)
 
 
+@cli.command()
+@click.option("--host", default="127.0.0.1", show_default=True, help="Interface to bind.")
+@click.option("--port", default=8000, show_default=True, type=int, help="Port to bind.")
+@click.pass_context
+def dashboard(ctx: click.Context, host: str, port: int) -> None:
+    """Start the local review dashboard at http://HOST:PORT (Ctrl+C to stop)."""
+    from .dashboard import run_dashboard
+
+    run_dashboard(ctx.obj["channel"], host=host, port=port)
+
+
 if __name__ == "__main__":
     cli()

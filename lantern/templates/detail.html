@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ draft.stem }}{% endblock %}
+{% block content %}
+
+<a href="/" class="back">&larr; Back to drafts</a>
+<h2>{{ draft.stem }}</h2>
+
+{% if request.query_params.get("saved") %}
+  <div class="flash flash-save">Script saved.</div>
+{% endif %}
+
+<div class="detail-grid">
+
+  <aside class="preview">
+    <video controls preload="metadata" width="100%">
+      <source src="{{ draft.video_url }}" type="video/mp4">
+      Your browser cannot play this video.
+    </video>
+    <p class="meta">{{ draft.video_size_mb }} MB</p>
+
+    <h3>Thumbnail</h3>
+    <img src="{{ draft.thumbnail_url }}" alt="draft thumbnail" class="thumbnail">
+
+    <form action="/draft/{{ draft.stem }}/approve" method="post" class="approve-form">
+      <button type="submit" class="btn btn-approve">Approve for upload</button>
+    </form>
+    <form action="/draft/{{ draft.stem }}/reject" method="post" class="reject-form"
+          onsubmit="return confirm('Permanently delete this draft and all its files?');">
+      <button type="submit" class="btn btn-reject">Reject and delete</button>
+    </form>
+  </aside>
+
+  <section class="script-editor">
+    <h3>Script <small>({{ draft.script_path }})</small></h3>
+    <p class="hint">
+      This is the load-bearing human step. Edit until the script has a real angle,
+      a strong hook, and varied structure. Save before approving.
+    </p>
+    <form action="/draft/{{ draft.stem }}/save-script" method="post">
+      <textarea name="content" spellcheck="true">{{ draft.script_content }}</textarea>
+      <button type="submit" class="btn btn-save">Save script</button>
+    </form>
+  </section>
+
+</div>
+
+{% endblock %}
