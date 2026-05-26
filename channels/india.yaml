@@ -42,6 +42,13 @@ research:
   # See lantern/research.py NON_LATIN_RE to tweak the allowed/blocked scripts.
   exclude_non_latin_titles: true
 
-# Sections for later modules (script, voice, assemble, upload, instagram) will
-# be appended here as each module is built. Missing sections fall back to safe
+# --- Script generation (used by script.py) --------------------------------
+script:
+  editor: "notepad"            # any executable on PATH; null = auto-detect (Windows -> notepad)
+  word_count_target: 1300      # ~7-8 minutes at typical narration speed
+  word_count_min: 900          # ~6 min floor
+  word_count_max: 1700         # ~10 min ceiling
+
+# Sections for later modules (voice, assemble, upload, instagram) will be
+# appended here as each module is built. Missing sections fall back to safe
 # defaults inside lantern/config.py.

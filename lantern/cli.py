@@ -50,5 +50,31 @@ def research(ctx: click.Context) -> None:
     run_research(ctx.obj["channel"], env)
 
 
+@cli.command()
+@click.option("--topic", required=True, help="The topic for this video.")
+@click.option(
+    "--llm",
+    is_flag=True,
+    help="Generate first draft via LLM_PROVIDER from .env. Manual fallback if unavailable.",
+)
+@click.option(
+    "--no-edit",
+    is_flag=True,
+    help="Write the template/draft and exit without opening an editor.",
+)
+@click.pass_context
+def script(ctx: click.Context, topic: str, llm: bool, no_edit: bool) -> None:
+    """Generate (or open) a script for the chosen topic."""
+    from .script import run_script
+
+    run_script(
+        channel=ctx.obj["channel"],
+        env=ctx.obj["env"],
+        topic=topic,
+        use_llm=llm,
+        no_edit=no_edit,
+    )
+
+
 if __name__ == "__main__":
     cli()

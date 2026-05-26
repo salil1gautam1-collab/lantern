@@ -29,6 +29,13 @@ class ResearchConfig(BaseModel):
     exclude_non_latin_titles: bool = True  # drop Devanagari/CJK/etc. titles when language=en
 
 
+class ScriptConfig(BaseModel):
+    editor: str | None = None              # None = auto: 'notepad' on Windows
+    word_count_target: int = 1300          # ~7-8 min at typical narration speed
+    word_count_min: int = 900              # ~6 min floor
+    word_count_max: int = 1700             # ~10 min ceiling
+
+
 class ChannelConfig(BaseModel):
     name: str
     slug: str
@@ -37,6 +44,7 @@ class ChannelConfig(BaseModel):
     themes: list[str]
     language: str = "en"
     research: ResearchConfig = Field(default_factory=ResearchConfig)
+    script: ScriptConfig = Field(default_factory=ScriptConfig)
 
 
 class EnvConfig(BaseModel):
