@@ -342,24 +342,28 @@ def run_assemble(
     res = (asm.resolution_width, asm.resolution_height)
 
     # 1. Search Pexels + Pixabay
+    # Two query streams: (a) channel themes for thematic breadth, (b) extra_queries
+    # for story-element specifics like "buddhist monk meditation" so the b-roll
+    # matches the characters/scenes the scripts actually feature.
     print("\n=== Searching stock sources ===")
     all_candidates: list[dict] = []
-    for theme in channel.themes:
+    search_terms = list(channel.themes) + list(asm.extra_queries)
+    for term in search_terms:
         if env.pexels_api_key:
             try:
-                hits = _pexels_search_videos(theme, env.pexels_api_key, asm.clips_per_query)
+                hits = _pexels_search_videos(term, env.pexels_api_key, asm.clips_per_query)
                 all_candidates.extend(hits)
-                print(f"  Pexels  '{theme}': {len(hits)} videos")
+                print(f"  Pexels  '{term}': {len(hits)} videos")
             except Exception as e:  # noqa: BLE001
-                log.warning("Pexels search failed for '%s': %s", theme, e)
+                log.warning("Pexels search failed for '%s': %s", term, e)
             time.sleep(0.5)
         if env.pixabay_api_key:
             try:
-                hits = _pixabay_search_videos(theme, env.pixabay_api_key, asm.clips_per_query)
+                hits = _pixabay_search_videos(term, env.pixabay_api_key, asm.clips_per_query)
                 all_candidates.extend(hits)
-                print(f"  Pixabay '{theme}': {len(hits)} videos")
+                print(f"  Pixabay '{term}': {len(hits)} videos")
             except Exception as e:  # noqa: BLE001
-                log.warning("Pixabay search failed for '%s': %s", theme, e)
+                log.warning("Pixabay search failed for '%s': %s", term, e)
             time.sleep(0.5)
 
     if not all_candidates:
@@ -443,9 +447,61 @@ def run_assemble(
     print("Generating draft thumbnail...")
     _build_thumbnail(title, thumb_path, (1280, 720))
 
+    # Captions (optional, post-processing step) — transcribes voiceover and
+    # burns subtitles onto the video via ffmpeg. Replaces video_path in place.
+    cap_cfg = getattr(channel, "captions", None)
+    captions_burned = False
+    caption_meta: dict | None = None
+    if cap_cfg and cap_cfg.enabled:
+        from .captions import burn_subtitles, transcribe_to_srt
+
+        print("\n=== Captions (faster-whisper) ===")
+        srt_path = output_dir / f"{stem}.srt"
+        try:
+            seg_count = transcribe_to_srt(
+                voice_audio, srt_path, model_size=cap_cfg.whisper_model
+            )
+            print(f"Transcribed {seg_count} segments -> {srt_path.name}")
+
+            font_size = (
+                random.randint(cap_cfg.font_size_min, cap_cfg.font_size_max)
+                if cap_cfg.vary_per_video
+                else cap_cfg.font_size_max
+            )
+            outline = (
+                random.randint(cap_cfg.outline_min, cap_cfg.outline_max)
+                if cap_cfg.vary_per_video
+                else cap_cfg.outline_max
+            )
+            print(f"Burning captions ({cap_cfg.font_name} {font_size}pt, outline {outline}px)...")
+            burn_subtitles(
+                input_video=video_path,
+                srt_path=srt_path,
+                output_video=video_path,
+                font_name=cap_cfg.font_name,
+                font_size=font_size,
+                outline=outline,
+            )
+            captions_burned = True
+            caption_meta = {
+                "model": cap_cfg.whisper_model,
+                "segments": seg_count,
+                "font_name": cap_cfg.font_name,
+                "font_size": font_size,
+                "outline": outline,
+                "srt_path": str(srt_path.relative_to(REPO_ROOT)),
+            }
+            print(f"Captioned video: {video_path.relative_to(REPO_ROOT)}")
+        except Exception as e:  # noqa: BLE001 — captions failure is non-fatal
+            log.error("Captions step failed: %s — keeping uncaptioned video.", e)
+            print(f"  CAPTIONS FAILED: {e}")
+            print(f"  Video saved without captions. Re-run if you want to retry.")
+
     size_mb = video_path.stat().st_size / (1024 * 1024)
     print(f"\nVideo:     {video_path.relative_to(REPO_ROOT)} ({size_mb:.1f} MB, {duration:.1f}s)")
     print(f"Thumbnail: {thumb_path.relative_to(REPO_ROOT)}")
+    if captions_burned:
+        print(f"Captions:  burned in ({caption_meta['segments']} segments)")
 
     # 7. Provenance record (full license text per asset)
     record_path = write_record(
@@ -478,6 +534,7 @@ def run_assemble(
                 for u in used
             ],
             "b_roll_count": len(used),
+            "captions": caption_meta,
         },
     )
     print(f"Record:    {record_path.relative_to(REPO_ROOT)}")

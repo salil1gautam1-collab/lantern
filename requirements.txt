@@ -28,3 +28,6 @@ python-multipart>=0.0.9           # form parsing for POST endpoints
 
 # --- Module 6: upload.py ---------------------------------------------------
 google-auth-oauthlib>=1.2         # one-time browser OAuth flow for YouTube upload
+
+# --- v1.1: captions post-processing for assemble.py -----------------------
+faster-whisper>=1.0               # local STT for caption timestamps; ~150MB model on first use

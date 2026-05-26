@@ -46,11 +46,23 @@ class AssembleConfig(BaseModel):
     resolution_width: int = 1920
     resolution_height: int = 1080
     fps: int = 30
-    clip_seconds_avg: int = 6              # how long each b-roll segment plays
-    clips_per_query: int = 5                # how many results to fetch per search query
+    clip_seconds_avg: int = 8              # how long each b-roll segment plays
+    clips_per_query: int = 15               # how many results to fetch per search query
     music_volume: float = 0.10              # mix at 10% behind voice
     music_enabled: bool = True              # uses random track from assets/music/ if present
     ledger_keep_recent: int = 50           # how many recently-used assets to avoid in dedupe
+    extra_queries: list[str] = Field(default_factory=list)  # story-element queries run alongside theme-based queries
+
+
+class CaptionsConfig(BaseModel):
+    enabled: bool = True
+    whisper_model: str = "base.en"          # tiny.en | base.en | small.en | medium.en | large-v3
+    font_name: str = "Arial"
+    font_size_min: int = 22                  # 1080p sweet spot
+    font_size_max: int = 28
+    outline_min: int = 2
+    outline_max: int = 3
+    vary_per_video: bool = True             # randomize within ranges each render for visual variation
 
 
 class UploadConfig(BaseModel):
@@ -96,6 +108,7 @@ class ChannelConfig(BaseModel):
     script: ScriptConfig = Field(default_factory=ScriptConfig)
     voice: VoiceConfig = Field(default_factory=VoiceConfig)
     assemble: AssembleConfig = Field(default_factory=AssembleConfig)
+    captions: CaptionsConfig = Field(default_factory=CaptionsConfig)
     upload: UploadConfig = Field(default_factory=UploadConfig)
     instagram: InstagramConfig = Field(default_factory=InstagramConfig)
 

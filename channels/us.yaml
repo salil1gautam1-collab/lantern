@@ -63,11 +63,36 @@ assemble:
   resolution_width: 1920
   resolution_height: 1080
   fps: 30
-  clip_seconds_avg: 6
-  clips_per_query: 5
+  clip_seconds_avg: 8                # 8s per clip; fewer slots needed -> less repetition
+  clips_per_query: 15                # 15 results per source per theme -> ~120 candidates
   music_volume: 0.10
   music_enabled: true
   ledger_keep_recent: 50
+
+  # Story-element queries that run IN ADDITION to the theme + modifier searches.
+  # Use these to pull footage matching the kinds of CHARACTERS and SCENES your
+  # scripts typically feature, not just thematic wisdom imagery. Each query runs
+  # against both Pexels and Pixabay.
+  extra_queries:
+    - "buddhist monk meditation"
+    - "monk temple"
+    - "zen meditation"
+    - "meditation cushion"
+    - "buddhist temple sunrise"
+    - "old monk"
+    - "buddhist statue"
+    - "person meditating alone"
+
+# --- Captions (used by assemble.py post-processing) -----------------------
+captions:
+  enabled: true
+  whisper_model: "base.en"           # tiny.en | base.en | small.en | medium.en | large-v3 — bigger = more accurate, slower
+  font_name: "Arial"
+  font_size_min: 22                  # 1080p sweet spot for body captions; was 32 (too big)
+  font_size_max: 28                  # was 40 (way too big)
+  outline_min: 2
+  outline_max: 3
+  vary_per_video: true               # randomize within ranges each render (visual variation across videos)
 
 # --- Upload (used by upload.py) -------------------------------------------
 upload:
