@@ -174,5 +174,25 @@ def instagram(ctx: click.Context, video_path_str: str | None) -> None:
     run_instagram(ctx.obj["channel"], ctx.obj["env"], specific_video=p)
 
 
+@cli.command()
+@click.option(
+    "--output-dir",
+    "-o",
+    "output_dir_str",
+    type=click.Path(),
+    default=None,
+    help="Output directory for the .zip archive. Default: backups/",
+)
+@click.pass_context
+def backup(ctx: click.Context, output_dir_str: str | None) -> None:
+    """Bundle essentials (.env, secrets, configs, records, source, scripts) into a timestamped .zip."""
+    from pathlib import Path
+
+    from .backup import run_backup
+
+    od = Path(output_dir_str) if output_dir_str else None
+    run_backup(output_dir=od)
+
+
 if __name__ == "__main__":
     cli()

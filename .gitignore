@@ -97,3 +97,6 @@ desktop.ini
 # --- Logs -----------------------------------------------------------------
 *.log
 logs/
+
+# --- Backup archives (contain .env + OAuth tokens — sensitive!) -----------
+backups/
