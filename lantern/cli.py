@@ -155,5 +155,24 @@ def upload(ctx: click.Context, video_path_str: str | None, auth_only: bool) -> N
     run_upload(ctx.obj["channel"], ctx.obj["env"], specific_video=p, auth_only=auth_only)
 
 
+@cli.command()
+@click.option(
+    "--video",
+    "video_path_str",
+    type=click.Path(exists=True),
+    default=None,
+    help="Specific video to export. Default: latest .mp4.uploaded (or .mp4) in output/video/<channel>/.",
+)
+@click.pass_context
+def instagram(ctx: click.Context, video_path_str: str | None) -> None:
+    """Export a 9:16 vertical cut + caption for MANUAL Instagram posting."""
+    from pathlib import Path
+
+    from .instagram import run_instagram
+
+    p = Path(video_path_str) if video_path_str else None
+    run_instagram(ctx.obj["channel"], ctx.obj["env"], specific_video=p)
+
+
 if __name__ == "__main__":
     cli()

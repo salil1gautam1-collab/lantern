@@ -66,6 +66,25 @@ class UploadConfig(BaseModel):
     )
 
 
+class InstagramConfig(BaseModel):
+    enabled: bool = True
+    max_duration_seconds: int = 90          # current Reels max
+    target_width: int = 1080                # 9:16 vertical
+    target_height: int = 1920
+    default_hashtags: list[str] = Field(
+        default_factory=lambda: [
+            "wisdom",
+            "stoicism",
+            "philosophy",
+            "lifeadvice",
+            "mentalhealth",
+        ]
+    )
+    caption_template: str = (
+        "{title}\n\nFull video on YouTube: {youtube_url}\n\n{hashtags}"
+    )
+
+
 class ChannelConfig(BaseModel):
     name: str
     slug: str
@@ -78,6 +97,7 @@ class ChannelConfig(BaseModel):
     voice: VoiceConfig = Field(default_factory=VoiceConfig)
     assemble: AssembleConfig = Field(default_factory=AssembleConfig)
     upload: UploadConfig = Field(default_factory=UploadConfig)
+    instagram: InstagramConfig = Field(default_factory=InstagramConfig)
 
 
 class EnvConfig(BaseModel):

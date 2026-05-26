@@ -80,3 +80,19 @@ upload:
     - "philosophy"
     - "life advice"
     - "Buddhist wisdom"
+
+# --- Instagram export (used by instagram.py) ------------------------------
+instagram:
+  enabled: true
+  max_duration_seconds: 90            # current Reels max
+  target_width: 1080                  # 9:16 vertical
+  target_height: 1920
+  default_hashtags:
+    - wisdom
+    - stoicism
+    - philosophy
+    - lifeadvice
+    - buddhistwisdom
+    - mentalhealth
+  # caption_template placeholders: {title}, {youtube_url}, {hashtags}
+  caption_template: "{title}\n\nFull video on YouTube: {youtube_url}\n\n{hashtags}"
