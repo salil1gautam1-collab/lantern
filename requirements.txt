@@ -15,3 +15,7 @@ pytrends>=4.9                     # Google Trends (unofficial scraper; defended 
 
 # --- Module 3: voice.py ----------------------------------------------------
 edge-tts>=6.1                     # Microsoft Edge TTS (free, no API key required)
+
+# --- Module 4: assemble.py -------------------------------------------------
+moviepy>=2.1                      # video composition (ffmpeg wrapper)
+Pillow>=10.0                      # thumbnail rendering

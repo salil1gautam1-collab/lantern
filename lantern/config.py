@@ -42,6 +42,17 @@ class VoiceConfig(BaseModel):
     volume: str = "+0%"                     # edge-tts volume adjustment
 
 
+class AssembleConfig(BaseModel):
+    resolution_width: int = 1920
+    resolution_height: int = 1080
+    fps: int = 30
+    clip_seconds_avg: int = 6              # how long each b-roll segment plays
+    clips_per_query: int = 5                # how many results to fetch per search query
+    music_volume: float = 0.10              # mix at 10% behind voice
+    music_enabled: bool = True              # uses random track from assets/music/ if present
+    ledger_keep_recent: int = 50           # how many recently-used assets to avoid in dedupe
+
+
 class ChannelConfig(BaseModel):
     name: str
     slug: str
@@ -52,6 +63,7 @@ class ChannelConfig(BaseModel):
     research: ResearchConfig = Field(default_factory=ResearchConfig)
     script: ScriptConfig = Field(default_factory=ScriptConfig)
     voice: VoiceConfig = Field(default_factory=VoiceConfig)
+    assemble: AssembleConfig = Field(default_factory=AssembleConfig)
 
 
 class EnvConfig(BaseModel):

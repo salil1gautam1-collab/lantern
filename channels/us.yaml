@@ -1,0 +1,70 @@
+# ===========================================================================
+# Lantern channel configuration — US (active)
+# ===========================================================================
+# Active config (set ACTIVE_CHANNEL=us in .env). Loaded by every pipeline
+# module via lantern.config.load_channel("us").
+#
+# Pivoted from india to us on 2026-05-26 based on CPM math:
+# US viewers ~10x more valuable per view than India viewers. Competition is
+# higher in the US wisdom niche but YouTube's algorithm distributes globally
+# regardless; a US-targeted channel still picks up India/UK/CA viewers.
+#
+# The india.yaml config remains on disk for future reactivation as a second
+# channel — no work lost from the earlier setup.
+
+# --- Channel identity -----------------------------------------------------
+name: "By Lantern Light"          # Display name (used in tags, descriptions, dashboard)
+slug: "us"                         # Used in file paths (output/us/, records/us/, etc.)
+region: "US"                       # ISO country code — passed to YouTube/pytrends APIs
+
+# --- Content ---------------------------------------------------------------
+niche: "practical wisdom for hard times"
+themes:
+  - stoic
+  - buddhist
+  - taoist
+  - vedantic                       # universal philosophy; less mainstream in US but interested audience exists
+language: "en"                     # English narration
+
+# --- Trend research (used by research.py) ---------------------------------
+research:
+  pytrends_geo: "US"
+  youtube_region_code: "US"
+  candidates_per_run: 8
+
+  query_modifiers:
+    - "wisdom"
+    - "for hard times"
+    - "teachings"
+
+  exclude_shorts: true
+  youtube_duration: "medium"
+  min_video_seconds: 90
+
+  # Even on a US-targeted channel the operator reads Hindi; keep Devanagari
+  # allowed in research signal (it's harmless — region=US rarely surfaces it).
+  exclude_non_latin_titles: true
+
+# --- Script generation (used by script.py) --------------------------------
+script:
+  editor: "notepad"
+  word_count_target: 1300
+  word_count_min: 900
+  word_count_max: 1700
+
+# --- Voiceover (used by voice.py) -----------------------------------------
+voice:
+  primary: "en-US-AndrewMultilingualNeural"  # newer, very natural conversational US male
+  rate: "+0%"
+  volume: "+0%"
+
+# --- Video assembly (used by assemble.py) ---------------------------------
+assemble:
+  resolution_width: 1920
+  resolution_height: 1080
+  fps: 30
+  clip_seconds_avg: 6
+  clips_per_query: 5
+  music_volume: 0.10
+  music_enabled: true
+  ledger_keep_recent: 50

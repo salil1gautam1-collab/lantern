@@ -70,6 +70,9 @@ def run_voice(
                 f"Run 'python -m lantern script --topic ...' first."
             )
         print(f"Using latest script: {script_path.relative_to(REPO_ROOT)}")
+    else:
+        # Resolve user-supplied relative paths to absolute so .relative_to(REPO_ROOT) works
+        script_path = script_path.resolve()
 
     if not script_path.exists():
         raise click.ClickException(f"Script not found: {script_path}")

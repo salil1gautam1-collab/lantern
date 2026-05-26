@@ -55,6 +55,17 @@ voice:
   rate: "+0%"                      # speed adjustment; "-10%" slower, "+10%" faster
   volume: "+0%"                    # volume adjustment
 
-# Sections for later modules (assemble, upload, instagram) will be appended
-# here as each module is built. Missing sections fall back to safe defaults
-# inside lantern/config.py.
+# --- Video assembly (used by assemble.py) ---------------------------------
+assemble:
+  resolution_width: 1920
+  resolution_height: 1080
+  fps: 30
+  clip_seconds_avg: 6              # each b-roll segment plays ~6s
+  clips_per_query: 5               # results per Pexels/Pixabay search
+  music_volume: 0.10               # background music at 10% behind voice
+  music_enabled: true              # uses random .mp3/.wav from assets/music/ if present
+  ledger_keep_recent: 50           # don't reuse clips that appeared in last 50 videos
+
+# Sections for later modules (upload, instagram) will be appended here as each
+# module is built. Missing sections fall back to safe defaults inside
+# lantern/config.py.
