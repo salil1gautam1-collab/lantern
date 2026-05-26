@@ -1,0 +1,87 @@
+"""Configuration loader for Lantern.
+
+Reads `.env` and `channels/<slug>.yaml`, returns validated config objects.
+Shared by every pipeline module.
+"""
+
+from __future__ import annotations
+
+import os
+from pathlib import Path
+
+import yaml
+from dotenv import load_dotenv
+from pydantic import BaseModel, Field
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+class ResearchConfig(BaseModel):
+    pytrends_geo: str = "IN"
+    youtube_region_code: str = "IN"
+    candidates_per_run: int = 8
+    query_modifiers: list[str] = Field(
+        default_factory=lambda: ["wisdom", "for hard times", "teachings"]
+    )
+    exclude_shorts: bool = True
+    youtube_duration: str = "medium"  # any | short | medium | long
+    min_video_seconds: int = 90
+    exclude_non_latin_titles: bool = True  # drop Devanagari/CJK/etc. titles when language=en
+
+
+class ChannelConfig(BaseModel):
+    name: str
+    slug: str
+    region: str
+    niche: str
+    themes: list[str]
+    language: str = "en"
+    research: ResearchConfig = Field(default_factory=ResearchConfig)
+
+
+class EnvConfig(BaseModel):
+    youtube_api_key: str | None = None
+    pexels_api_key: str | None = None
+    pixabay_api_key: str | None = None
+    youtube_oauth_client_json: str = "secrets/client_secret.json"
+    youtube_token_cache: str = "secrets/youtube_token.json"
+    llm_provider: str = "none"
+    llm_api_key: str | None = None
+    llm_model: str = "gemini-2.0-flash"
+    active_channel: str = "india"
+    stock_cache_max_gb: int = 5
+
+
+def load_env(env_path: Path | None = None) -> EnvConfig:
+    """Load `.env` from repo root and return a validated EnvConfig."""
+    env_path = env_path or (REPO_ROOT / ".env")
+    load_dotenv(env_path)
+    return EnvConfig(
+        youtube_api_key=os.getenv("YOUTUBE_API_KEY") or None,
+        pexels_api_key=os.getenv("PEXELS_API_KEY") or None,
+        pixabay_api_key=os.getenv("PIXABAY_API_KEY") or None,
+        youtube_oauth_client_json=os.getenv(
+            "YOUTUBE_OAUTH_CLIENT_JSON", "secrets/client_secret.json"
+        ),
+        youtube_token_cache=os.getenv(
+            "YOUTUBE_TOKEN_CACHE", "secrets/youtube_token.json"
+        ),
+        llm_provider=os.getenv("LLM_PROVIDER", "none"),
+        llm_api_key=os.getenv("LLM_API_KEY") or None,
+        llm_model=os.getenv("LLM_MODEL", "gemini-2.0-flash"),
+        active_channel=os.getenv("ACTIVE_CHANNEL", "india"),
+        stock_cache_max_gb=int(os.getenv("STOCK_CACHE_MAX_GB", "5")),
+    )
+
+
+def load_channel(slug: str) -> ChannelConfig:
+    """Load and validate `channels/<slug>.yaml`."""
+    path = REPO_ROOT / "channels" / f"{slug}.yaml"
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Channel config not found: {path}. "
+            f"Available: {sorted(p.stem for p in (REPO_ROOT / 'channels').glob('*.yaml'))}"
+        )
+    with open(path, encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    return ChannelConfig(**data)

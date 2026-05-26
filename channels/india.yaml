@@ -24,6 +24,24 @@ research:
   youtube_region_code: "IN"        # YouTube Data API regionCode
   candidates_per_run: 8            # How many topic candidates to surface per run
 
+  # For each theme above, we search YouTube with theme + each modifier (e.g. "stoic wisdom").
+  # Targeted queries surface deep-wisdom content instead of viral noise.
+  query_modifiers:
+    - "wisdom"
+    - "for hard times"
+    - "teachings"
+
+  # Filter out Shorts and meme content
+  exclude_shorts: true             # drop #shorts, #short, #tiktok titles + very short videos
+  youtube_duration: "medium"       # search filter: any | short | medium (4-20min) | long
+  min_video_seconds: 90            # post-filter: drop anything under N seconds
+
+  # Language hygiene — region=IN returns lots of regional-language titles.
+  # The filter drops titles in scripts the operator can't read. Devanagari (Hindi)
+  # is INCLUDED in research (allowed through) because the operator reads Hindi.
+  # See lantern/research.py NON_LATIN_RE to tweak the allowed/blocked scripts.
+  exclude_non_latin_titles: true
+
 # Sections for later modules (script, voice, assemble, upload, instagram) will
 # be appended here as each module is built. Missing sections fall back to safe
 # defaults inside lantern/config.py.
