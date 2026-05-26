@@ -12,3 +12,6 @@ click>=8.1                    # CLI framework
 # --- Module 1: research.py -------------------------------------------------
 google-api-python-client>=2.100   # YouTube Data API v3 client
 pytrends>=4.9                     # Google Trends (unofficial scraper; defended with try/except)
+
+# --- Module 3: voice.py ----------------------------------------------------
+edge-tts>=6.1                     # Microsoft Edge TTS (free, no API key required)

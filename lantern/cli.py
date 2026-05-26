@@ -76,5 +76,24 @@ def script(ctx: click.Context, topic: str, llm: bool, no_edit: bool) -> None:
     )
 
 
+@cli.command()
+@click.option(
+    "--script",
+    "script_path_str",
+    type=click.Path(exists=True),
+    default=None,
+    help="Path to script .md file. Defaults to the latest script in output/scripts/<channel>/.",
+)
+@click.pass_context
+def voice(ctx: click.Context, script_path_str: str | None) -> None:
+    """Render voiceover audio from a script .md using edge-tts."""
+    from pathlib import Path
+
+    from .voice import run_voice
+
+    p = Path(script_path_str) if script_path_str else None
+    run_voice(ctx.obj["channel"], ctx.obj["env"], p)
+
+
 if __name__ == "__main__":
     cli()

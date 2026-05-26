@@ -36,6 +36,12 @@ class ScriptConfig(BaseModel):
     word_count_max: int = 1700             # ~10 min ceiling
 
 
+class VoiceConfig(BaseModel):
+    primary: str = "en-IN-PrabhatNeural"   # warm Indian-English male
+    rate: str = "+0%"                       # edge-tts rate adjustment, e.g. "-10%", "+15%"
+    volume: str = "+0%"                     # edge-tts volume adjustment
+
+
 class ChannelConfig(BaseModel):
     name: str
     slug: str
@@ -45,6 +51,7 @@ class ChannelConfig(BaseModel):
     language: str = "en"
     research: ResearchConfig = Field(default_factory=ResearchConfig)
     script: ScriptConfig = Field(default_factory=ScriptConfig)
+    voice: VoiceConfig = Field(default_factory=VoiceConfig)
 
 
 class EnvConfig(BaseModel):
