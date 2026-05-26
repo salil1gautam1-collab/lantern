@@ -20,15 +20,15 @@ Free-tier, semi-automated, **human-in-the-loop** faceless YouTube pipeline.
 
 | # | Module | What it does | Status |
 |---|--------|--------------|--------|
-| 1 | `research.py` | 5–10 ranked topic candidates from trend signals | not built |
-| 2 | `script.py` | Original script (hook + POV + structure); `--manual` or LLM | not built |
-| 3 | `voice.py` | Voiceover audio from edited script (edge-tts) | not built |
-| 4 | `assemble.py` | Video assembly: voiceover + varied b-roll + (optional) captions + music + draft thumbnail | not built |
-| 5 | Dashboard | FastAPI review UI — edit script/title/tags/thumbnail; click Approve to upload | not built |
-| 6 | `upload.py` | Upload as PRIVATE/SCHEDULED draft after approval | not built |
-| 7 | `instagram.py` | Export vertical Reels cut + caption to `output/instagram/` for **manual** posting | not built |
+| 1 | `research.py` | 5–10 ranked topic candidates from trend signals | ✅ built |
+| 2 | `script.py` | Original script (hook + POV + structure); `--manual` or LLM | ✅ built |
+| 3 | `voice.py` | Voiceover audio from edited script (edge-tts) | ✅ built |
+| 4 | `assemble.py` | Video assembly: voiceover + varied b-roll + (optional) captions + music + draft thumbnail | ✅ built |
+| 5 | Dashboard | FastAPI review UI — edit script/title/tags/thumbnail; click Approve to upload | ✅ built |
+| 6 | `upload.py` | Upload as PRIVATE/SCHEDULED draft after approval | ✅ built |
+| 7 | `instagram.py` | Export vertical Reels cut + caption to `output/instagram/` for **manual** posting | ✅ built |
 
-Modules are built one at a time. Each gets tested end-to-end before the next starts.
+All modules built and tested end-to-end. Quickstart at the bottom of this README.
 
 ---
 
@@ -108,11 +108,55 @@ These steps are intentionally off-limits to code, by design:
 ## Status
 
 - [x] Scaffold + initial config
-- [ ] `research.py` (module 1)
-- [ ] `script.py` (module 2)
-- [ ] `voice.py` (module 3)
-- [ ] `assemble.py` (module 4)
-- [ ] Review dashboard (module 5)
-- [ ] `upload.py` (module 6)
-- [ ] `instagram.py` (module 7)
-- [ ] Backup script
+- [x] `research.py` (module 1)
+- [x] `script.py` (module 2)
+- [x] `voice.py` (module 3)
+- [x] `assemble.py` (module 4)
+- [x] Review dashboard (module 5)
+- [x] `upload.py` (module 6)
+- [x] `instagram.py` (module 7)
+- [x] Backup script
+
+---
+
+## Quickstart — first real video, end to end
+
+Activate the venv first (every new PowerShell window):
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Then:
+
+```powershell
+# 1. Pick a topic (8 ranked candidates print to terminal)
+python -m lantern research
+
+# 2. Write the script in notepad — copy your chosen topic from research output
+python -m lantern script --topic "your topic here"
+
+# 3. Render voiceover (uses latest script automatically)
+python -m lantern voice
+
+# 4. Assemble the video (pulls b-roll, ~1-2 min)
+python -m lantern assemble
+
+# 5. Review in the dashboard (browse to http://127.0.0.1:8000, click Approve)
+python -m lantern dashboard
+
+# 6. Upload as PRIVATE draft on YouTube
+python -m lantern upload
+
+# 7. (Optional) Export a 9:16 cut for Instagram (manual posting only)
+python -m lantern instagram
+
+# 8. Backup the project (creates a timestamped .zip in backups/)
+python -m lantern backup
+```
+
+Then in YouTube Studio: review the private draft, tick the "altered/AI content" box if the script was LLM-drafted, and click **Publish**.
+
+### Before your very first upload
+
+- Add your Gmail as a test user in Google Cloud Console → APIs & Services → OAuth consent screen → Test users.
+- Run `python -m lantern upload --auth-only` to do the one-time browser OAuth. Sign in with the personal Gmail (`salil1.gautam1@gmail.com`), NOT a FlexWorx account.
